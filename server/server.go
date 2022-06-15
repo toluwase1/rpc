@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/jinzhu/gorm"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
@@ -21,13 +20,7 @@ func main() {
 
 	/* Database connection */
 	database.InitPostgresDB(os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"), os.Getenv("DB_NAME"), os.Getenv("DB_HOST"), os.Getenv("DB_PORT"))
-	defer func(Db *gorm.DB) {
-		err := Db.Close()
-		if err != nil {
-			log.Println(err)
-			panic(err)
-		}
-	}(database.Db)
+	defer database.Db.Close()
 
 	rpcServer := rpc.NewServer()
 	mining := new(handlers.Mining)
