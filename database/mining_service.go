@@ -18,19 +18,17 @@ func (db MiningServer) Authorize(request models.AuthorizeRequest) (response bool
 	authReq.LastLoggedInTime = time.Now()
 	_, err := db.authorizationRequestRepository.SaveAuthorizationRequest(authReq)
 	if err != nil {
-		e = err
-		return
+		return false, err
 	}
-	response = true
-	return
+	return true, nil
 }
 
 func (db MiningServer) Subscribe() (response models.SubscribeResponse, e error) {
 	var subscription = models.Subscription{
-		SubscriptionId1: stringGenerator(20),
-		SubscriptionId2: stringGenerator(20),
-		Extranonce1:     stringGenerator(10),
-		DateCreated:     time.Now(),
+		SubId1:    stringGenerator(20),
+		SubId2:    stringGenerator(20),
+		Extra:     stringGenerator(10),
+		CreatedAt: time.Now(),
 	}
 	_, err := db.subscriptionRepository.SaveSubscription(subscription)
 	if err != nil {
@@ -38,26 +36,21 @@ func (db MiningServer) Subscribe() (response models.SubscribeResponse, e error) 
 		return
 	}
 	response = models.SubscribeResponse{
-		Extranonce1:      subscription.Extranonce1,
-		Extranonce2_size: 4,
+		Extra1:     subscription.Extra,
+		ExtraSize2: 4,
 		Subscriptions: []models.SubscriptionRequest{
 			{
 				"mining.set_difficulty",
-				subscription.SubscriptionId1,
+				subscription.SubId1,
 			},
 			{
 				"mining.notify",
-				subscription.SubscriptionId2,
+				subscription.SubId2,
 			},
 		},
 	}
 	return
 }
-
-func (db MiningServer) Notify() (response models.NotifyResponse, e error) {
-	return
-}
-
 
 func stringGenerator(n int) string {
 	const alphabet = "abcdefghijklmnopgrstuvwxyz"

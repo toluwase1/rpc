@@ -18,8 +18,3 @@ func (mining *Mining) Subscribe(result *models.SubscribeResponse) (e error) {
 	*result, e = miningService.Subscribe()
 	return
 }
-
-func (mining *Mining) Notify(result *models.NotifyResponse) (e error) {
-	*result, e = miningService.Notify()
-	return
-}
