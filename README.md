@@ -1,3 +1,8 @@
+How to proceed: 
+##### Step 1: go run server/server.go to start the server on port 3000
+##### Step 2: go run client/client.go to run the client
+
+
 # Luxor Interview
 
 ## Intro
